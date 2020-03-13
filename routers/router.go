@@ -18,6 +18,12 @@ func SetupRouter() *gin.Engine{
 	r.GET("/login", controllers.LoginGet)
 	r.POST("/login",controllers.LoginPost)
 
-	r.GET("/index",controllers.IndexGet)
+	r.GET("/",controllers.HomeGet)
+
+	article := r.Group("/article")
+	{
+		article.GET("/add",controllers.AddArticleGet)
+		article.POST("/add",controllers.AddArticlePost)
+	}
 	return r
 }

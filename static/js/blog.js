@@ -32,6 +32,7 @@ $(document).ready(function () {
             }
         },
         submitHandler: function (form) {
+            console.log("register form submit")
             var urlStr = "/register";
             // alert("urlStr:"+urlStr)
             $(form).ajaxSubmit({
@@ -39,7 +40,7 @@ $(document).ready(function () {
                 type: "post",
                 dataType: "json",
                 success: function (data, status) {
-                    alert("data:" + data.message)
+                    alert("data:" + data.message + ":" + status)
                     if (data.code == 1) {
                         setTimeout(function () {
                             window.location.href = "/login"
@@ -50,6 +51,7 @@ $(document).ready(function () {
                     alert("err:" + data.message + ":" + status)
                 }
             })
+            $(this).resetForm();
         }
     });
 

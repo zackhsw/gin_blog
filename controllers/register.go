@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"fmt"
-	"gin_blog/routers/models"
+	"gin_blog/gb"
+	"gin_blog/models"
+	"gin_blog/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"net/http"
 	"time"
 )
@@ -18,7 +21,6 @@ func RegisterPost(c *gin.Context){
 	//数据校验 有效性
 	//判断注册是否重复 拿到数据库对比
 	//写入数据库
-	//1.
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	repassword := c.PostForm("repassword")
@@ -30,6 +32,8 @@ func RegisterPost(c *gin.Context){
 		c.JSON(http.StatusOK,gin.H{"code":0,"message":"用户名已经存在"})
 		return
 	}
+	password = utils.MD5(password)
+	gb.Logger.Debug(zap.String("md5",password))
 
 	user := models.User{
 		Username:username,

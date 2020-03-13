@@ -24,7 +24,7 @@ var Logger *zap.SugaredLogger
 func LogConf(){
 	now := time.Now()
 	hook := &lumberjack.Logger{
-		Filename: fmt.Sprintf("log/%sdfsd"),
+		Filename: fmt.Sprintf("log/%007", now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second()),
 		MaxSize: 5000,
 		MaxBackups: 10,
 		Compress: false,
@@ -35,5 +35,13 @@ func LogConf(){
 
 	enConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 
-
+	core := zapcore.NewCore(
+		zapcore.NewConsoleEncoder(enConfig),
+		zapcore.AddSync(hook),
+		zap.InfoLevel,
+		)
+	logger := zap.New(core,zap.AddCaller(),zap.AddCallerSkip(1))
+	_log := log.New(hook,"",log.LstdFlags)
+	Logger = logger.Sugar()
+	_log.Println("Start...")
 }
